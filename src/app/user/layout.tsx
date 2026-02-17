@@ -11,7 +11,6 @@ export default function UserLayout({
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        {/* พื้นที่สำหรับแสดงเนื้อหาหน้าต่างๆ (Main Content) */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6 md:pt-8">
           <div className="mx-auto max-w-7xl">{children}</div>
         </main>

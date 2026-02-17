@@ -1,9 +1,49 @@
+"use client";
+
 import { Button } from "@/src/components/ui/Button";
 import { Input } from "@/src/components/ui/Input";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
 export default function LoginPage() {
+    const router = useRouter();
+
+    const { login, isLoading, error, clearError } = useAuthStore();
+
+    const [formData, setFormData] = useState({
+        usernameOrEmail: "",
+        password: "",
+        rememberMe: false,
+    })
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type, checked } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        clearError();
+        try {
+            await login({
+                usernameOrEmail: formData.usernameOrEmail,
+                password: formData.password,
+                rememberMe: formData.rememberMe,
+            });
+
+            router.push("/user");
+            router.refresh();
+
+        } catch (error) {
+            console.error("Login failed:", error);
+        }
+    };
     return (
         <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC] px-2 py-4 sm:px-6 lg:px-8 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white via-slate-50 to-slate-100">
             <div className="w-full max-w-[450px] rounded-[20px] bg-white p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-slate-100/50">
@@ -24,14 +64,23 @@ export default function LoginPage() {
                     </p>
                 </div>
 
-                <form className="space-y-2">
+                {error && (
+                    <div className="mb-6 rounded-lg bg-red-50 border border-red-100 p-3 text-center text-sm text-red-600 transition-all">
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-2">
                     <div>
                         <label className="mb-2 block text-sm font-light text-slate-600">
                             Email Address
                         </label>
                         <Input
-                            type="email"
-                            placeholder="your@email.com"
+                            type="text"
+                            name="usernameOrEmail"
+                            value={formData.usernameOrEmail}
+                            onChange={handleChange}
+                            placeholder="Enter your username or email"
                             required
                         />
                     </div>
@@ -42,6 +91,9 @@ export default function LoginPage() {
                         </label>
                         <Input
                             type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
                             placeholder="••••••••"
                             required
                         />
@@ -51,6 +103,9 @@ export default function LoginPage() {
                         <input
                             type="checkbox"
                             id="remember"
+                            name="rememberMe"
+                            checked={formData.rememberMe}
+                            onChange={handleChange}
                             className="h-4 w-4 rounded border-slate-300 text-slate-800 focus:ring-slate-800"
                         />
                         <label htmlFor="remember" className="ml-3 block text-sm font-light text-slate-500">
@@ -60,13 +115,14 @@ export default function LoginPage() {
 
                     <Button
                         type="submit"
+                        disabled={isLoading}
                         className="mt-6 w-full rounded-lg bg-slate-900 px-4 py-3 text-sm font-medium tracking-wide text-white shadow-md shadow-slate-900/10 transition-all hover:bg-slate-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
                     >
-                        Sign in
+                        {isLoading ? "Signing in..." : "Sign in"}
                     </Button>
 
                     <div className="mb-2 flex items-center justify-between">
-                        <Link href="#" className="text-xs font-medium text-slate-500 hover:text-slate-800 hover:underline">
+                        <Link href="#" className="text-sm font-medium text-slate-500 hover:text-slate-800 hover:underline">
                             Forgot password?
                         </Link>
                     </div>

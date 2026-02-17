@@ -44,14 +44,7 @@ export async function apiClient<T>(endpoint: string, options: FetchOptions = {})
     try {
         const response = await fetch(`${BASE_URL}${endpoint}`, config);
 
-        let data: any;
-        const method = config.method ? config.method.toUpperCase() : "GET";
-
-        if (method !== "GET") {
-            data = await response.json();
-        } else {
-            data = await response.json().catch(() => ({}));
-        }
+        const data = await response.json().catch(() => ({}));
 
         if (!response.ok) {
             throw new Error(data.message || `API Error: ${response.status}`);
