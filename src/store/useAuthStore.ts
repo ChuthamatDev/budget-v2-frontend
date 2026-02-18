@@ -8,7 +8,6 @@ interface AuthState {
     accessToken: string | null;
     isLoading: boolean;
     error: string | null;
-
     login: (payload: LoginPayload) => Promise<void>;
     register: (payload: RegisterPayload) => Promise<void>;
     logout: () => void;

@@ -19,7 +19,7 @@ export default function RegisterPage() {
         email: '',
         password: '',
         confirmPassword: '',
-        prefix_name: 'นาย',
+        prefix_name: '',
         first_name: '',
         last_name: ''
     });
@@ -277,7 +277,7 @@ export default function RegisterPage() {
                         </div>
                     </form>
 
-                    <div className='mt-6 text-center text-xs font-light text-slate-500'>
+                    <div className='mt-6 text-center text-sm font-light text-slate-500'>
                         Already have an account?{' '}
                         <Link href='/login' className='font-medium text-slate-800 hover:underline'>
                             Sign in
