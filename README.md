@@ -49,43 +49,6 @@ src/
 └── hooks/            # Custom React hooks
 ```
 
-## 🔧 Getting Started
-
-### Prerequisites
-
-- Node.js (v18 or higher recommended)
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd budget-v2-fronted
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-
-3. Configure Environment Variables:
-   Create a `.env.local` file in the root directory and add your API URL:
-   ```env
-   NEXT_PUBLIC_API_URL=https://ssk.ubonmicrotech.com/api/v1
-   ```
-
-4. Run the development server:
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
 ## 🔒 Authentication Flow
 
 1. **Login**: User logs in -> Access Token & User Data are stored in Zustand (persisted to localStorage).
