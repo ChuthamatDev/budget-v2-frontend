@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Noto_Sans_Thai } from 'next/font/google';
 import './globals.css';
+import AuthGuard from '../auth/AuthGuard';
 
 const notoSansThai = Noto_Sans_Thai({
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -21,7 +22,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='th' className={`${notoSansThai.variable}`}>
-            <body className='antialiased bg-slate-50 text-slate-900 font-sans'>{children}</body>
+            <body className='antialiased bg-slate-50 text-slate-900 font-sans'>
+                <AuthGuard>
+                    {children}
+                </AuthGuard>
+            </body>
         </html>
     );
 }

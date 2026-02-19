@@ -1,13 +1,15 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { authService } from '@/src/services/auth.service';
-import { LoginPayload, RegisterPayload } from '@/src/types/auth.types';
+import { LoginPayload, RegisterPayload, User } from '@/src/types/auth.types';
 
 interface AuthState {
-    user: any | null;
+    user: User | null;
     accessToken: string | null;
+    hasHydrated: boolean;
     isLoading: boolean;
     error: string | null;
+    setHasHydrated: (value: boolean) => void;
     login: (payload: LoginPayload) => Promise<void>;
     register: (payload: RegisterPayload) => Promise<void>;
     logout: () => void;
@@ -19,20 +21,47 @@ export const useAuthStore = create<AuthState>()(
         (set) => ({
             user: null,
             accessToken: null,
+            hasHydrated: false,
             isLoading: false,
             error: null,
+            setHasHydrated: (value) => set({ hasHydrated: value }),
 
             login: async (payload) => {
                 set({ isLoading: true, error: null });
                 try {
                     const response = await authService.login(payload);
+
+                    // Extract token - prioritizing the known correct path
+                    const messageObj =
+                        typeof response.message === 'object' ? response.message : null;
+                    const token =
+                        messageObj?.token ||
+                        response.accessToken ||
+                        response.data?.accessToken ||
+                        response.access_token ||
+                        response.token;
+
+                    if (!token) {
+                        const errorMsg = 'No access token found in response';
+                        console.error(errorMsg, response);
+                        set({
+                            error: errorMsg,
+                            isLoading: false
+                        });
+                        return;
+                    }
+
+                    // Extract user data - prioritizing the known correct path
+                    const userData = messageObj?.userData || response.data || response.user;
+
                     set({
-                        user: response.data,
-                        accessToken: response.accessToken,
+                        user: userData,
+                        accessToken: token,
                         isLoading: false
                     });
-                } catch (error: any) {
-                    set({ error: error.message, isLoading: false });
+                } catch (error: unknown) {
+                    const errorMessage = error instanceof Error ? error.message : 'Login failed';
+                    set({ error: errorMessage, isLoading: false });
                     throw error;
                 }
             },
@@ -42,8 +71,9 @@ export const useAuthStore = create<AuthState>()(
                 try {
                     await authService.register(payload);
                     set({ isLoading: false });
-                } catch (error: any) {
-                    set({ error: error.message, isLoading: false });
+                } catch (error: unknown) {
+                    const errorMessage = error instanceof Error ? error.message : 'Register failed';
+                    set({ error: errorMessage, isLoading: false });
                     throw error;
                 }
             },
@@ -52,7 +82,7 @@ export const useAuthStore = create<AuthState>()(
                 set({ user: null, accessToken: null, error: null });
             },
 
-            clearError: () => set({ error: null }),
+            clearError: () => set({ error: null })
         }),
         {
             name: 'auth-storage',
@@ -60,6 +90,9 @@ export const useAuthStore = create<AuthState>()(
                 user: state.user,
                 accessToken: state.accessToken
             }),
+            onRehydrateStorage: () => (state) => {
+                state?.setHasHydrated(true);
+            }
         }
     )
 );

@@ -40,8 +40,7 @@ export default function LoginPage() {
                 rememberMe: formData.rememberMe
             });
 
-            router.push('/user');
-            router.refresh();
+            router.push('/user/dashboard');
         } catch (error) {
             console.error('Login failed:', error);
         }
@@ -56,6 +55,7 @@ export default function LoginPage() {
                         width={64}
                         height={64}
                         className='mb-4 object-contain drop-shadow-sm'
+                        style={{ width: "auto", height: "auto" }}
                         priority
                     />
                     <h1 className='text-2xl font-medium text-slate-800 tracking-wide'>
@@ -75,7 +75,7 @@ export default function LoginPage() {
                 <form onSubmit={handleSubmit} className='space-y-5'>
                     <div>
                         <label className='mb-2 block text-sm font-light text-slate-600'>
-                            Email Address
+                            Username or email
                         </label>
                         <Input
                             type='text'

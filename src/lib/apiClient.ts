@@ -1,15 +1,6 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://ssk.ubonmicrotech.com/api/v1";
+import { getAccessTokenFromStorage } from "@/src/lib/authStorage";
 
-const getAccessToken = () => {
-    try {
-        if (typeof window !== "undefined") {
-            return localStorage.getItem("accessToken");
-        }
-    } catch (error) {
-        console.error("Error accessing localStorage:", error);
-    }
-    return null;
-};
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://ssk.ubonmicrotech.com/api/v1";
 
 interface FetchOptions extends Omit<RequestInit, "body"> {
     body?: unknown;
@@ -25,7 +16,7 @@ export async function apiClient<T>(endpoint: string, options: FetchOptions = {})
     }
 
     if (requireAuth) {
-        const token = getAccessToken();
+        const token = getAccessTokenFromStorage();
         if (token) {
             headers.append("Authorization", `Bearer ${token}`);
         }
@@ -51,11 +42,12 @@ export async function apiClient<T>(endpoint: string, options: FetchOptions = {})
         }
 
         return data as T;
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "An unexpected error occurred";
         console.error(`[apiClient Error] ${endpoint}:`, error);
 
         if (typeof window !== "undefined") {
-            alert(error.message || "An unexpected error occurred. Please try again.");
+            alert(message);
         }
 
         throw error;

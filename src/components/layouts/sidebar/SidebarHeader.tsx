@@ -10,6 +10,7 @@ export default function SidebarHeader() {
                     width={28}
                     height={28}
                     className='brightness-0 invert object-contain'
+                    style={{ width: "auto", height: "auto" }}
                 />
             </div>
             <div className='flex flex-col'>

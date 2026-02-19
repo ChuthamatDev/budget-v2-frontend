@@ -26,10 +26,32 @@ export interface RefreshTokenPayload {
     refresh_token: string;
 }
 
+export interface User {
+    id: number | string;
+    username: string;
+    email: string;
+    prefix_name?: string;
+    first_name?: string;
+    last_name?: string;
+    role?: string;
+    [key: string]: any;
+}
+
 export interface ApiResponse<T = any> {
     success?: boolean;
-    message?: string;
+    message?:
+        | string
+        | {
+              token?: string;
+              userData?: User;
+              [key: string]: any;
+          };
     data?: T;
     accessToken?: string;
     refreshToken?: string;
+    access_token?: string;
+    refresh_token?: string;
+    token?: string;
+    user?: User;
+    [key: string]: any;
 }
