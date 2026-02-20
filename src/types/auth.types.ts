@@ -11,6 +11,8 @@ export interface RegisterPayload {
     prefix_name: string;
     first_name: string;
     last_name: string;
+    phone_number: string;
+    avatar: string | null;
 }
 
 export interface AdminLoginPayload {
@@ -40,12 +42,12 @@ export interface User {
 export interface ApiResponse<T = any> {
     success?: boolean;
     message?:
-        | string
-        | {
-              token?: string;
-              userData?: User;
-              [key: string]: any;
-          };
+    | string
+    | {
+        token?: string;
+        userData?: User;
+        [key: string]: any;
+    };
     data?: T;
     accessToken?: string;
     refreshToken?: string;

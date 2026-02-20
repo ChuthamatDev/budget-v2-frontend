@@ -19,7 +19,7 @@ export default function SidebarUser() {
         router.push("/login");
     };
 
-    const userInitial = user?.username ? user.username.charAt(2).toUpperCase() : "U";
+    const userInitial = user?.username ? user.username.charAt(0).toUpperCase() : "U";
 
     const displayUsername = user?.username || "Loading...";
 

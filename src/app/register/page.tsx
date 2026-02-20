@@ -21,7 +21,9 @@ export default function RegisterPage() {
         confirmPassword: '',
         prefix_name: '',
         first_name: '',
-        last_name: ''
+        last_name: '',
+        phone_number: '',
+        avatar: ''
     });
 
     const [showPassword, setShowPassword] = useState(false);
@@ -58,7 +60,9 @@ export default function RegisterPage() {
                 password: formData.password,
                 prefix_name: formData.prefix_name,
                 first_name: formData.first_name,
-                last_name: formData.last_name
+                last_name: formData.last_name,
+                phone_number: formData.phone_number,
+                avatar: formData.avatar
             });
             setIsSuccess(true);
 
@@ -204,18 +208,33 @@ export default function RegisterPage() {
                             </div>
                         </div>
 
-                        <div>
-                            <label className='mb-1 block text-xs font-medium text-slate-700'>
-                                Email Address
-                            </label>
-                            <Input
-                                type='email'
-                                name='email'
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder='your@email.com'
-                                required
-                            />
+                        <div className='flex gap-3'>
+                            <div className='flex-1'>
+                                <label className='mb-1 block text-xs font-medium text-slate-700'>
+                                    Email Address
+                                </label>
+                                <Input
+                                    type='email'
+                                    name='email'
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder='your@email.com'
+                                    required
+                                />
+                            </div>
+                            <div className='flex-1'>
+                                <label className='mb-1 block text-xs font-medium text-slate-700'>
+                                    Phone Number
+                                </label>
+                                <Input
+                                    type='tel'
+                                    name='phone_number'
+                                    value={formData.phone_number}
+                                    onChange={handleChange}
+                                    placeholder='0812345678'
+                                    required
+                                />
+                            </div>
                         </div>
 
                         <div className='relative'>
