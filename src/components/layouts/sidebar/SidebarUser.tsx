@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/src/store/useAuthStore";
+import Link from "next/link";
 
 export default function SidebarUser() {
     const router = useRouter();
@@ -87,10 +88,30 @@ export default function SidebarUser() {
             </button>
 
             {showProfileMenu && (
-                <div
-                    className="fixed inset-0 z-[40]"
-                    onClick={() => setShowProfileMenu(false)}
-                ></div>
+                <div className="absolute bottom-[80px] left-4 right-4 rounded-xl border border-slate-100 bg-white p-2 shadow-lg shadow-slate-200/50 transition-all z-50">
+                    <Link
+                        href="/user/profile"
+                        onClick={() => setShowProfileMenu(false)}
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+                    >
+                        <svg className="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Profile Settings
+                    </Link>
+
+                    <div className="my-1 border-t border-slate-100"></div>
+
+                    <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                    >
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Sign out
+                    </button>
+                </div>
             )}
         </div>
     );

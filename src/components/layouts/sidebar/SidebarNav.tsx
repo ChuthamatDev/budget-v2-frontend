@@ -8,7 +8,7 @@ export default function SidebarNav() {
     const pathname = usePathname();
 
     return (
-        <nav className='flex-1 overflow-y-auto px-4 py-6 scrollbar-thin scrollbar-thumb-slate-200'>
+        <nav className="flex-1 overflow-y-auto px-4 py-6 scrollbar-thin scrollbar-thumb-slate-200">
             <p className='mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400/80'>
                 Menu
             </p>

@@ -4,7 +4,7 @@ import SidebarUser from './sidebar/SidebarUser';
 
 export default function Sidebar() {
     return (
-        <aside className='hidden w-72 flex-col border-r border-slate-200 bg-white lg:flex'>
+        <aside className='hidden w-72 flex-col border-r border-slate-200 bg-white lg:flex shrink-0 h-full overflow-hidden'>
             <SidebarHeader />
             <SidebarNav />
             <SidebarUser />
