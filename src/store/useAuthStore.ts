@@ -14,11 +14,12 @@ interface AuthState {
     register: (payload: RegisterPayload) => Promise<void>;
     logout: () => void;
     clearError: () => void;
+    fetchProfile: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
     persist(
-        (set) => ({
+        (set, get) => ({
             user: null,
             accessToken: null,
             hasHydrated: false,
@@ -75,6 +76,30 @@ export const useAuthStore = create<AuthState>()(
                     const errorMessage = error instanceof Error ? error.message : 'Register failed';
                     set({ error: errorMessage, isLoading: false });
                     throw error;
+                }
+            },
+
+            fetchProfile: async () => {
+                const { accessToken } = get();
+                if (!accessToken) return;
+
+                set({ isLoading: true, error: null });
+                try {
+                    const response = await authService.getMyAccount() as any;
+
+                    const userData = response?.data?.message || response?.message || response?.data || response;
+
+                    set({
+                        user: userData,
+                        isLoading: false
+                    });
+                } catch (error: unknown) {
+                    console.error('Failed to fetch profile:', error);
+                    const errorMessage =
+                        error instanceof Error ? error.message : 'Failed to fetch profile';
+                    set({ error: errorMessage, isLoading: false });
+
+                    get().logout();
                 }
             },
 
